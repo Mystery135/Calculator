@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Calculator {
 //    You are to create an interactive "calculator"
 //    that computes three interesting things using methods
@@ -11,7 +13,14 @@ public class Calculator {
 //    Is the program streamlined (efficient use of code)? 5 points
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String option = scanner.nextLine();
+        boolean flag = false;
+        while (flag == false){
+            System.out.println("Type out \"option 1\", \"option 2\", ");
+            option = scanner.nextLine();
 
+        }
     }
 
     private void computeQuadratic(){
@@ -20,7 +29,11 @@ public class Calculator {
     private void computeTax(){
 
     }
-    private void compute()
+    private void compute(){
+
+
+
+    }
 
 
 }
