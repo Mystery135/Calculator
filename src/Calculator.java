@@ -1,3 +1,4 @@
+import javax.xml.datatype.DatatypeConstants;
 import java.util.*;
 
 public class Calculator {
@@ -19,8 +20,85 @@ public static final Set<String> COMPUTE_TYPES = Collections.unmodifiableSet(new 
                     COMPUTE_QUADRATIC,
                     COMPUTE_COMPOUND_INTEREST
             )));
+   private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        String optionPicked = getUserOption();
+        System.out.println("You picked " + optionPicked + "!");
+
+        switch (optionPicked){
+            case COMPUTE_COMPOUND_INTEREST -> {
+                double principal = 0, rate = 0;
+                int frequency = 0, years = 0;
+                String principalString, rateString, frequencyString, yearsString;
+                boolean principalChosen = false, rateChosen = false, frequencyChosen = false, yearsChosen = false;
+                do{
+                    if (!principalChosen) {
+                        System.out.print("Enter in the principal amount (starting value): ");
+                        principalString = scanner.nextLine();
+                        try {
+                            principal = Double.parseDouble(principalString);
+                            principalChosen = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid double!");
+                            continue;
+                        }
+                    }
+                    if (!rateChosen) {
+                        System.out.print("Enter in the interest rate (decimal): ");
+                        rateString = scanner.nextLine();
+                        try {
+                            rate = Double.parseDouble(rateString);
+                            rateChosen = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid double!");
+                            continue;
+                        }
+                    }
+                    if (!frequencyChosen) {
+                        System.out.print("Enter in the amount of times interest is compounded per year: ");
+                        frequencyString = scanner.nextLine();
+                        try {
+                            frequency = Integer.parseInt(frequencyString);
+                            frequencyChosen = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid integer!");
+                            continue;
+                        }
+                    }
+                    System.out.print("Enter in the amount of time you want to calculate for (years): ");
+                    yearsString = scanner.nextLine();
+                    try {
+                        years = Integer.parseInt(yearsString);
+                        yearsChosen = true;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter in a valid integer!");
+                        continue;
+                    }
+                }while(!principalChosen || !rateChosen || !frequencyChosen || !yearsChosen);
+                System.out.println("After " + years + " years, you will have $" + computeCompoundInterest(principal, rate, frequency, years) + "!");
+            }
+            case COMPUTE_PASCALS_TRIANGLE ->{
+//                do {
+//                    computePascalsTriangle();
+//                }while ();
+            }
+            case COMPUTE_QUADRATIC -> {
+                double a = 0, b = 0, c = 0;
+                boolean aPicked = false, bPicked = false, cPicked = false;
+                do {
+                    System.out.println("Enter a (a in ax² + bx + c = 0): ");
+                    try {
+
+                    }catch (NumberFormatException e){
+
+                    }
+                }while (!aPicked && bPicked && cPicked);
+            }
+
+        }
+    }
+    private static String getUserOption(){
         String optionPicked = "";
         do {
             System.out.print("Choose and type in an option to compute: ");
@@ -41,22 +119,17 @@ public static final Set<String> COMPUTE_TYPES = Collections.unmodifiableSet(new 
                 }
             }
         } while (optionPicked.equals(""));
-        System.out.println("You picked " + optionPicked + "!");
+        return optionPicked;
     }
-
-    private void computeQuadratic(){
-
-    }
-    private void computePascalsTriangle(){
-
-    }
-    private void computeCompoundInterest(){
-
+    private static void computeQuadratic(int x, int y){
 
 
     }
+    private static void computePascalsTriangle(int rows){
 
-
-
-
+    }
+    private static double computeCompoundInterest(double principal, double rate, int frequency, int years){
+        double amount = principal*Math.pow((1+rate/frequency), frequency*years);
+        return Math.round(amount*100.0)/100.0;
+    }
 }
