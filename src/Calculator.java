@@ -12,15 +12,27 @@ public class Calculator {
 //    Does the program work? 2 points
 //    Is the program easy to follow? 3 points
 //    Is the program streamlined (efficient use of code)? 5 points
-public static final String COMPUTE_PASCALS_TRIANGLE = "pascal's triangle";
-public static final String COMPUTE_QUADRATIC = "quadratic";
-public static final String COMPUTE_COMPOUND_INTEREST = "compound interest";
-public static final Set<String> COMPUTE_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+private static final String COMPUTE_PASCALS_TRIANGLE = "pascal's triangle";
+private static final String COMPUTE_QUADRATIC = "quadratic";
+private static final String COMPUTE_COMPOUND_INTEREST = "compound interest";
+private static final Set<String> COMPUTE_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
                     COMPUTE_PASCALS_TRIANGLE,
                     COMPUTE_QUADRATIC,
                     COMPUTE_COMPOUND_INTEREST
             )));
-   private static Scanner scanner = new Scanner(System.in);
+private static final Map<Integer, String> NUMBER_TO_COMPUTE_TYPE = Map.of(
+        1, COMPUTE_PASCALS_TRIANGLE,
+        2, COMPUTE_QUADRATIC,
+        3, COMPUTE_COMPOUND_INTEREST
+);
+private static final Map<String, Integer> COMPUTE_TYPE_TO_NUMBER = Map.of(
+        COMPUTE_PASCALS_TRIANGLE, 1,
+        COMPUTE_QUADRATIC, 2,
+        COMPUTE_COMPOUND_INTEREST, 3
+);
+
+
+   private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         String optionPicked = getUserOption();
@@ -85,45 +97,90 @@ public static final Set<String> COMPUTE_TYPES = Collections.unmodifiableSet(new 
             }
             case COMPUTE_QUADRATIC -> {
                 double a = 0, b = 0, c = 0;
+                String aString, bString, cString;
                 boolean aPicked = false, bPicked = false, cPicked = false;
                 do {
                     System.out.println("Enter a (a in ax² + bx + c = 0): ");
-                    try {
-
-                    }catch (NumberFormatException e){
-
+                    aString = scanner.nextLine();
+                    if (!aPicked) {
+                        try {
+                            a = Integer.parseInt(aString);
+                            aPicked = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid double!");
+                            continue;
+                        }
                     }
-                }while (!aPicked && bPicked && cPicked);
+                    if (!bPicked) {
+                        System.out.println("Enter b (a in ax² + bx + c = 0): ");
+                        bString = scanner.nextLine();
+                        try {
+                            b = Integer.parseInt(bString);
+                            bPicked = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid double!");
+                            continue;
+                        }
+                    }
+                    System.out.println("Enter c (a in ax² + bx + c = 0): ");
+                    cString = scanner.nextLine();
+                    try {
+                            c = Integer.parseInt(cString);
+                            cPicked = true;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter in a valid double!");
+                        }
+                }while (!aPicked || !bPicked || !cPicked);
+                System.out.println("The two answers are: " + computeQuadratic(a, b, c));;
             }
 
+        }
+    }
+    private static boolean isInt(String string){
+        try {
+            Integer.parseInt(string);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
         }
     }
     private static String getUserOption(){
         String optionPicked = "";
         do {
-            System.out.print("Choose and type in an option to compute: ");
+            System.out.print("Choose and type in an option or its corresponding number to compute: ");
             int i = 0;
             for (String string : COMPUTE_TYPES) {
                 i++;
-                System.out.print(string);
+                System.out.print(string + " (" + COMPUTE_TYPE_TO_NUMBER.get(string) + ")");
                 if (i != COMPUTE_TYPES.size()) {
                     System.out.print(", ");
                 }
             }
             System.out.println();
             String userInput = scanner.nextLine();
-            for (String string : COMPUTE_TYPES) {
-                if (userInput.equalsIgnoreCase(string)) {
-                    optionPicked = string;
-                    break;
+            if (isInt(userInput)){
+                int numChosen = Integer.parseInt(userInput);
+                optionPicked = NUMBER_TO_COMPUTE_TYPE.get(numChosen);
+            }else{
+                for (String string : COMPUTE_TYPES) {
+                    if (userInput.equalsIgnoreCase(string)) {
+                        optionPicked = string;
+                        break;
+                    }
                 }
             }
+
         } while (optionPicked.equals(""));
         return optionPicked;
     }
-    private static void computeQuadratic(int x, int y){
-
-
+    private static List<Double> computeQuadratic(double a, double b, double c){
+        double formula = Math.sqrt(Math.pow(b, 2) - 4 * a * c);
+        System.out.println(-b + -2);
+        double xPos = (-b + (formula/2*a));
+        double xNeg = (-b - (formula/2*a));
+        return Arrays.asList(xPos, xNeg);
+//        Test  questions: https://www.mathsisfun.com/algebra/quadratic-equation.html
+//        2, 5, 3 -> -1, -3/2
     }
     private static void computePascalsTriangle(int rows){
 
