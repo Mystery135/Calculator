@@ -26,7 +26,7 @@ public class Calculator {
         String optionPicked = getUserOption();
         System.out.println("You picked " + optionPicked + "!");
 
-        //Get user inputs and assign them to variables for user's chosen computation option
+        //Gets user's inputs and assigns them to variables for user's chosen computation option
         switch (optionPicked) {
             case COMPUTE_COMPOUND_INTEREST -> {
                 double principal = InputHelper.getDoubleInput(scanner, "Enter in the principal amount (starting value): ", "Error! Please enter in a valid double!", false);
@@ -38,8 +38,8 @@ public class Calculator {
                 int years = InputHelper.getIntInput(scanner, "Enter in the amount of time you want to calculate for (years): ", "Error! Please enter in a valid integer!", false);
                 System.out.println();
 
-                //Send user inputs to computation method and print the answer
-                System.out.println("\tAfter " + years + " years, you will have $" + computeCompoundInterest(principal, rate, frequency, years) + "!");
+                //Send user inputs to computation method and print the answer. Prints "years" if years > 1, else prints "year"
+                System.out.println("\tAfter " + years + (years > 1 ? " years" : " year") + ", you will have $" + computeCompoundInterest(principal, rate, frequency, years) + "!");
             }
             case DRAW_SHAPE -> {
                 String pattern = InputHelper.getStringInput(scanner, "Enter in a pattern (1D). You may use any character, including \" and \\: ", true);
@@ -76,14 +76,12 @@ public class Calculator {
 
     private static String getUserOption() {
         String optionPicked = "";
-        //Prompt the user for what they want to compute. Do while loop so it runs once, and if the user inputs an incorrect value, loop again
+        //Prompt the user for what they want to compute. Do while loop, so it always runs once, and if the user inputs an incorrect value, loop again
         do {
             System.out.print("Choose and type in an option or its corresponding number to compute: ");
-            int i = 0;
             //Loop through each compute type and print them with their corresponding numbers
-            for (String string : NUMBER_TO_COMPUTE_TYPE.values()) {
-                i++;
-                System.out.print(string + " (" + i + ")");
+            for (int i = 1; i <= NUMBER_TO_COMPUTE_TYPE.size(); i++) {
+                System.out.print(NUMBER_TO_COMPUTE_TYPE.get(i) + " (" + i + ")");
                 if (i != NUMBER_TO_COMPUTE_TYPE.values().size()) {
                     //Put commas between compute types if it is not the last compute type
                     System.out.print(", ");
@@ -96,8 +94,8 @@ public class Calculator {
 
             //Check if user's input is string or integer using a helper method
             if (InputHelper.isInt(userInput)) {
-                //If user's input is an integer, check if there is a corresponding compute type, then
-                //find the corresponding compute type. After that, set optionPicked to the compute type selected
+                /*If user's input is an integer, check if there is a corresponding compute type, then
+                find the corresponding compute type. After that, set optionPicked to the compute type selected */
                 if (Integer.parseInt(userInput) <= NUMBER_TO_COMPUTE_TYPE.values().size() && Integer.parseInt(userInput) > 0) {
                     int numChosen = Integer.parseInt(userInput);
                     optionPicked = NUMBER_TO_COMPUTE_TYPE.get(numChosen);
@@ -121,6 +119,12 @@ public class Calculator {
         double reusedFormula = Math.sqrt(Math.pow(b, 2) - 4 * a * c);
         double xPos = ((-b + reusedFormula) / (2 * a));
         double xNeg = ((-b - reusedFormula) / (2 * a));
+
+        //Round to 2 decimal places
+        xPos = Math.round(xPos * 100.0) / 100.0;
+        xNeg = Math.round(xNeg * 100.0) / 100.0;
+
+        //Return answer
         return Arrays.asList(xPos, xNeg);
     }
 
@@ -167,7 +171,7 @@ public class Calculator {
                 if (i != height - 1) {
                     builder.append(" ");
                 } else {
-                    //If it's the last row, use _ instead of a space
+                    //If it's the last row, use a _ instead of a space
                     builder.append("_");
                 }
             }

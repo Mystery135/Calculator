@@ -62,6 +62,4 @@ public class InputHelper {
         //Return the string input
         return scanner.nextLine();
     }
-
-
 }
