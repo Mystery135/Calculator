@@ -123,6 +123,7 @@ public class Calculator {
         double xNeg = ((-b - reusedFormula) / (2 * a));
         return Arrays.asList(xPos, xNeg);
     }
+
     //Draw shape based on user's pattern with nested for loops
     private static String computeDrawShape(String pattern, int width, int height) {
         //String builder to make joining strings easier
